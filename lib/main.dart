@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import './screens/loginScreen.dart';
+import './screens/signupScreen.dart';
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -12,6 +15,10 @@ class _MyAppState extends State<MyApp> {
       title: "Zlixr Students",
       debugShowCheckedModeBanner: false,
       home: ZlixrStudents(),
+      routes: {
+        LoginScreen.routeName: (contxt) => LoginScreen(),
+        SignUpScreen.routeName: (contxt) => SignUpScreen(),
+      },
     );
   }
 }
