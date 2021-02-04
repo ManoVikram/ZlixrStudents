@@ -44,3 +44,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Firebase data
+API/zlixrstudentspsgtech-firebase-adminsdk-nvhrz-303f6ef769.json
+android/app/google-services.json

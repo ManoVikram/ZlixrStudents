@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import './signupScreen.dart';
 
@@ -17,6 +19,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  UserCredential _userCredential;
 
   Widget _textField(String labelText, bool isPassword) {
     return TextFormField(
@@ -43,6 +47,57 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _firebaseSignInUser() async {
+    try {
+      print(_emailTextController.text);
+      print(_passwordTextController.text);
+      _userCredential = await _auth.signInWithEmailAndPassword(
+        email: _emailTextController.text,
+        password: _passwordTextController.text,
+      );
+      print(_userCredential);
+      print(_userCredential.user.uid);
+    } on FirebaseAuthException catch (error) {
+      String message = "ERROR: Enter correct EMAIL and PASSWORD.";
+
+      if (error.code == 'user-not-found') {
+        message = "No user found for that EMAIL.";
+      } else if (error.code == 'wrong-password') {
+        message = "Wrong PASSWORD provided for that user.";
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> _firebaseGoogleSignInUser() async {
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    UserCredential googleAuthUser =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    print(googleAuthUser);
+    print(googleAuthUser.credential.token);
+  }
+
+  Future<void> _resetPassword() async {
+    await _auth.sendPasswordResetEmail(email: _emailTextController.text);
   }
 
   @override
@@ -80,6 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         left: 20,
                       ),
                       child: InkWell(
+                        onTap: _resetPassword,
                         child: Text(
                           "Forgot Password",
                           style: TextStyle(
@@ -100,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(30),
                         child: RaisedButton(
-                          onPressed: () {},
+                          onPressed: _firebaseSignInUser,
                           elevation: 7,
                           padding: EdgeInsets.symmetric(
                             vertical: 20,
@@ -134,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(30),
                         child: RaisedButton(
-                          onPressed: () {},
+                          onPressed: _firebaseGoogleSignInUser,
                           elevation: 7,
                           padding: EdgeInsets.symmetric(
                             vertical: 20,

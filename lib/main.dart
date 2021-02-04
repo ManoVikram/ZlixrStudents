@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import './screens/loginScreen.dart';
 import './screens/signupScreen.dart';
@@ -23,16 +24,36 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class ZlixrStudents extends StatefulWidget {
-  @override
-  _ZlixrStudentsState createState() => _ZlixrStudentsState();
-}
+class ZlixrStudents extends StatelessWidget {
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
-class _ZlixrStudentsState extends State<ZlixrStudents> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return FutureBuilder(
+      // Initialize FlutterFire:
+      future: _initialization,
+      builder: (context, snapshot) {
+        // Check for errors
+        if (snapshot.hasError) {
+          return Center(
+            child: Text("ERROR: Someting went wrong."),
+          );
+        }
+
+        // Once complete, show your application
+        if (snapshot.connectionState == ConnectionState.done) {
+          return LoginScreen();
+        }
+
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 }
 
-void main() => runApp(MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
+}

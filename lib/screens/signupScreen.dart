@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import './loginScreen.dart';
 
@@ -17,6 +18,8 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  UserCredential _userCredential;
 
   Widget _textField(String labelText, bool isPassword) {
     return TextFormField(
@@ -43,6 +46,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _firebaseCreateUser() async {
+    try {
+      print(_emailTextController.text);
+      print(_passwordTextController.text);
+      _userCredential = await _auth.createUserWithEmailAndPassword(
+        email: _emailTextController.text,
+        password: _passwordTextController.text,
+      );
+    } on FirebaseAuthException catch (error) {
+      String message = "ERROR: Enter a valid EMAIL and PASSWORD.";
+
+      if (error.code == 'weak-password') {
+        message = "The password provided is too weak.";
+      } else if (error.code == 'email-already-in-use') {
+        message = "The account already exists for that email.";
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+        ),
+      );
+    } catch (error) {
+      print(error);
+    }
   }
 
   @override
@@ -72,7 +102,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(30),
                         child: RaisedButton(
-                          onPressed: () {},
+                          onPressed: _firebaseCreateUser,
                           elevation: 7,
                           padding: EdgeInsets.symmetric(
                             vertical: 20,
