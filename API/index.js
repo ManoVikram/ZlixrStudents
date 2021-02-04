@@ -5,6 +5,7 @@ const passport = require("passport");
 
 const app = express();
 
+const HOST = "127.0.0.1";
 const PORT = process.env.PORT || 3000;
 
 // Middleware for body-parser
@@ -33,4 +34,4 @@ require("./strategies/jsonwtStrategy")(passport);
 // Route
 
 
-app.listen(PORT, () => console.log(`Server is running on http://127.0.0.1:${PORT}`));
+app.listen(PORT, HOST, () => console.log(`Server is running on http://${HOST}:${PORT}`));
