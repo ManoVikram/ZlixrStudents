@@ -34,4 +34,4 @@ const FacultySchema = new Schema(
     }
 );
 
-module.exports = Person = mongoose.model("faculty", FacultySchema);
+module.exports = Faculty = mongoose.model("faculty", FacultySchema);

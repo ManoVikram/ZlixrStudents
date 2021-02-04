@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded( { extended: false } ));
 app.use(bodyParser.json());
 
 // All routes
-
+const auth = require("./routes/api/auth");
 
 // MongoDB configuration
 const db = require("./setup/urls").mongoURL;
@@ -22,7 +22,7 @@ const db = require("./setup/urls").mongoURL;
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true }).then(
     () => console.log("Connected to MongoDB successfully."),
 ).catch(
-    (error) => console.log("Error connecting to MongoDB."),
+    (error) => console.log("Error connecting to MongoDB: " + error),
 );
 
 // Passport middleware
@@ -32,6 +32,7 @@ app.use(passport.initialize());
 require("./strategies/jsonwtStrategy")(passport);
 
 // Route
+app.use("/api/auth", auth);
 
-
-app.listen(PORT, HOST, () => console.log(`Server is running on http://${HOST}:${PORT}`));
+// app.listen(PORT, HOST, () => console.log(`Server is running on http://${HOST}:${PORT}`));
+app.listen(PORT, () => console.log(`Server is running on http://127.0.0.1:${PORT}`));

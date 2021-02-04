@@ -27,4 +27,4 @@ const SubjectSchema = new Schema(
     },
 );
 
-module.exports = Course = mongoose.model("subject", SubjectSchema);
+module.exports = Subject = mongoose.model("subject", SubjectSchema);

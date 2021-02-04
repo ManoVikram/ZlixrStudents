@@ -12,4 +12,4 @@ const CourseSchema = new Schema(
     },
 );
 
-module.exports = Degree = mongoose.model("course", CourseSchema);
+module.exports = Course = mongoose.model("course", CourseSchema);

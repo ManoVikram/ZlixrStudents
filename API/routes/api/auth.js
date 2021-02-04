@@ -15,6 +15,7 @@ router.get("/", (request, response) => response.json({ test: "Testing authentica
 
 // Import Schema for student to register
 const Student = require("../../models/Student");
+const { response } = require("express");
 
 /*
 TYPE    POST
@@ -40,11 +41,13 @@ router.post("/signup", (request, response) => {
                     if (error) throw error;
 
                     bcrypt.hash(newStudent.password, salt, function (error, hash) {
-                        if (error) throw error;
+                        if (error) {
+                            throw error;
+                        }
 
                         newStudent.password = hash;
                         newStudent.save().then(
-                            (student) => student.json(student),
+                            (student) => response.json(student),
                         ).catch(
                             (error) => console.log("Unable to save the hashed password: " + error),
                         );
@@ -75,7 +78,7 @@ router.post("/login", (request, response) => {
                 return response.status(404).json({ emailError: "No user found for this Email." });
             }
 
-            bcrypt.compare(password, person.password).then(
+            bcrypt.compare(password, student.password).then(
                 (isCorrect) => {
                     if (isCorrect) {
                         // Use payload and create token for the user
@@ -112,7 +115,30 @@ router.post("/login", (request, response) => {
 });
 
 /*
-TYPE    POST
+TYPE    GET
+ROUTE   /api/auth/logout
+DESC    Route for user to log out
+ACCESS  PRIVATE
+ */
+// router.get("/logout", passport.authenticate(
+//         "jwt",
+//         { session: false },
+//     ),
+//     (request, response) => {
+//         /* request.logOut();
+//         response.redirect("/");
+//         response.json(
+//             {
+//                 logout: "Successfully logged out.",
+//             }
+//         ); */
+
+//         response.json({ logout: true });
+//     },
+// );
+
+/*
+TYPE    GET
 ROUTE   /api/auth/profile
 DESC    Route for user profile
 ACCESS  PRIVATE

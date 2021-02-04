@@ -13,7 +13,7 @@ module.exports = passport => {
         new JwtStrategy(
             opts,
             (jwt_payload, done) => {
-                Student.findById(jwt_payload).then(
+                Student.findById(jwt_payload.id).then(
                     (student) => {
                         if (student) {
                             return done(null, student);
