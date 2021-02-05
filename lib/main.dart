@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import './screens/loginScreen.dart';
 import './screens/signupScreen.dart';
+
+import './models/registerStudentBloc/registerStudent_bloc.dart';
 
 class MyApp extends StatefulWidget {
   @override
@@ -12,14 +15,21 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Zlixr Students",
-      debugShowCheckedModeBanner: false,
-      home: ZlixrStudents(),
-      routes: {
-        LoginScreen.routeName: (contxt) => LoginScreen(),
-        SignUpScreen.routeName: (contxt) => SignUpScreen(),
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<RegisterStudentBloc>(
+          create: (contxt) => RegisterStudentBloc(),
+        ),
+      ],
+      child: MaterialApp(
+        title: "Zlixr Students",
+        debugShowCheckedModeBanner: false,
+        home: ZlixrStudents(),
+        routes: {
+          LoginScreen.routeName: (contxt) => LoginScreen(),
+          SignUpScreen.routeName: (contxt) => SignUpScreen(),
+        },
+      ),
     );
   }
 }

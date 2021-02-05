@@ -48,3 +48,6 @@ app.*.map.json
 # Firebase data
 API/zlixrstudentspsgtech-firebase-adminsdk-nvhrz-303f6ef769.json
 android/app/google-services.json
+
+# Sensitive Data
+lib/GLOBALS.dart

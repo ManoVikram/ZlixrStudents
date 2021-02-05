@@ -36,6 +36,8 @@ dependencies:
   bloc: ^6.1.1
   flutter_bloc: ^6.1.1
   hydrated_bloc: ^6.1.0
+  equatable: ^1.2.5
+  meta: ^1.2.4
   http: ^0.12.2
   image_picker: ^0.6.7+21
   path_provider: ^1.6.27

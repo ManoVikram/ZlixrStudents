@@ -5,7 +5,7 @@ const passport = require("passport");
 
 const app = express();
 
-const HOST = "127.0.0.1";
+const HOST = "192.168.43.50";
 const PORT = process.env.PORT || 3000;
 
 // Middleware for body-parser
@@ -39,4 +39,4 @@ app.use("/api/auth", authenticateStudent);
 app.use("/api/update", updateStudentProfile);
 
 // app.listen(PORT, HOST, () => console.log(`Server is running on http://${HOST}:${PORT}`));
-app.listen(PORT, () => console.log(`Server is running on http://127.0.0.1:${PORT}`));
+app.listen(PORT, HOST, () => console.log(`Server is running on http://${HOST}:${PORT}`));
