@@ -23,12 +23,10 @@ class RegisterStudentBloc
     if (event is RegisterStudent) {
       final response = await http.post(
         url,
-        body: json.encode(
-          {
-            "firebaseUID": "",
-            "email": "",
-          },
-        ),
+        body: {
+          "firebaseUID": event.firebaseUID,
+          "email": event.email,
+        },
       );
 
       final extractedData = json.decode(response.body) as Map<String, dynamic>;

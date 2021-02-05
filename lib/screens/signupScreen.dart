@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import './loginScreen.dart';
+
+import '../models/registerStudentBloc/registerStudent_bloc.dart';
 
 class SignUpScreen extends StatefulWidget {
   static const String routeName = "/signUpScreen";
@@ -68,6 +71,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(message),
+          backgroundColor: Theme.of(context).errorColor,
         ),
       );
     } catch (error) {
@@ -77,6 +81,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final registerStudentBloc = BlocProvider.of<RegisterStudentBloc>(context);
+
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: SafeArea(
@@ -102,7 +108,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(30),
                         child: RaisedButton(
-                          onPressed: _firebaseCreateUser,
+                          onPressed: () async {
+                            await _firebaseCreateUser();
+                            await registerStudentBloc.add(RegisterStudent(
+                              firebaseUID: _userCredential.user.uid,
+                              email: _userCredential.user.email,
+                            ));
+                          },
                           elevation: 7,
                           padding: EdgeInsets.symmetric(
                             vertical: 20,

@@ -2,6 +2,7 @@
     package="com.example.zlixr_students_psg_tech">
    <application
         android:label="zlixr_students_psg_tech"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

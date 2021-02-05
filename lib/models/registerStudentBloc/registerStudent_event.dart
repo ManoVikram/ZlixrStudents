@@ -8,5 +8,11 @@ abstract class RegisterStudentEvent {
 }
 
 class RegisterStudent extends RegisterStudentEvent {
-  const RegisterStudent();
+  final String firebaseUID;
+  final String email;
+
+  const RegisterStudent({
+    @required this.firebaseUID,
+    @required this.email,
+  });
 }
