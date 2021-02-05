@@ -3,14 +3,18 @@ const Schema = mongoose.Schema;
 
 const FacultySchema = new Schema(
     {
+        firebaseUID: {
+            type: String,
+            required: true,
+        },
         email: {
             type: String,
             required: true,
         },
-        password: {
+        /* password: {
             type: String,
             required: true,
-        },
+        }, */
         departmentId: {
             type: Schema.Types.ObjectId,
         },

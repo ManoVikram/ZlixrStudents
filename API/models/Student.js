@@ -3,14 +3,18 @@ const Schema = mongoose.Schema;
 
 const StudentSchema = new Schema(
     {
+        firebaseUID: {
+            type: String,
+            required: true,
+        },
         email: {
             type: String,
             required: true,
         },
-        password: {
+        /* password: {
             type: String,
             required: true,
-        },
+        }, */
         name: {
             type: String,
         },
@@ -20,7 +24,10 @@ const StudentSchema = new Schema(
         studentRollNo: {
             type: String,
         },
-        degreeId: {
+        dateOfBirth: {
+            type: Date,
+        },
+        degreeID: {
             type: Schema.Types.ObjectId,
         },
         year: {
@@ -32,6 +39,39 @@ const StudentSchema = new Schema(
         profilePic: {
             type: String,
             // TODO: Add default
+        },
+        scoresGained: [
+            [
+                {
+                    student: {
+                        type: Schema.Types.ObjectId,
+                        ref: "student",
+                    },
+                    givenScore: {
+                        type: Number,
+                        default: 0,
+                    },
+                    date: {
+                        type: Date,
+                        default: Date.now(),
+                    },
+                }
+            ],
+        ],
+        score: [
+            {
+                scorePerSession: {
+                    type: Number,
+                },
+                date: {
+                    type: Date,
+                    default: Date.now(),
+                },
+            },
+        ],
+        zlixrs: {
+            type: Number,
+            default: 0,
         },
         date: {
             type: Date,

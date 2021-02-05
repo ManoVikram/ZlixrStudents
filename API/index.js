@@ -13,7 +13,9 @@ app.use(bodyParser.urlencoded( { extended: false } ));
 app.use(bodyParser.json());
 
 // All routes
-const auth = require("./routes/api/auth");
+// const auth = require("./routes/api/auth");
+const authenticateStudent = require("./routes/api/authenticateStudent");
+const updateStudentProfile = require("./routes/api/updateStudentProfile");
 
 // MongoDB configuration
 const db = require("./setup/urls").mongoURL;
@@ -26,13 +28,15 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true }).then(
 );
 
 // Passport middleware
-app.use(passport.initialize());
+// app.use(passport.initialize());
 
 // Configuration for JWT strategy
-require("./strategies/jsonwtStrategy")(passport);
+// require("./strategies/jsonwtStrategy")(passport);
 
 // Route
-app.use("/api/auth", auth);
+// app.use("/api/auth", auth);
+app.use("/api/auth", authenticateStudent);
+app.use("/api/update", updateStudentProfile);
 
 // app.listen(PORT, HOST, () => console.log(`Server is running on http://${HOST}:${PORT}`));
 app.listen(PORT, () => console.log(`Server is running on http://127.0.0.1:${PORT}`));
