@@ -50,25 +50,30 @@ router.post("/new", (request, response) => {
 TYPE    GET
 ROUTE   /api/department/all
 DESC    Route for viewing all the available departments
-ACCESS  PRIVATE
+ACCESS  PUBLIC
  */
 router.get("/all", (request, response) => {
-    if (request.body.firebaseUID == "Yw1et8lu8lXPrkTHxxTR2o6tB1p1") {
-        Student.findOne({ firebaseUID: request.body.firebaseUID }).then(
-            (student) => {
-                Department.find({}, (error, department) => {
-                    var departments = [];
-
-                    department.forEach((dept) => {
-                        departments.push(dept);
-                    });
-                    response.json(departments);
-                });
+    Student.findOne({ firebaseUID: request.body.firebaseUID }).then(
+        (student) => {
+            if (!student) {
+                return response.status(400).json({ accessDenied: "You are not allowed to access this route." });
             }
-        ).catch(
-            (error) => console.log("You are not allowed to access this route." + error),
-        );
-    }
+            Department.find({}, (error, department) => {
+                if (error) {
+                    throw error;
+                }
+
+                var departments = [];
+
+                department.forEach((dept) => {
+                    departments.push(dept);
+                });
+                response.json(departments);
+            });
+        }
+    ).catch(
+        (error) => console.log("You are not allowed to access this route." + error),
+    );
 });
 
 /*

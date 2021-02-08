@@ -11,7 +11,7 @@ ROUTE   /api/department/course/new
 DESC    Route for adding a new course under a department
 ACCESS  PRIVATE
  */
-router.post("/department/course/new", (request, response) => {
+router.post("/new", (request, response) => {
     Student.findOne({ firebaseUID: request.body.firebaseUID }).then(
         (student) => {
             if (!student) {
@@ -55,5 +55,54 @@ router.post("/department/course/new", (request, response) => {
         (error) => console.log("You are not allowed to access this route." + error),
     );
 });
+
+/*
+TYPE    GET
+ROUTE   /api/department/course/all
+DESC    Route for viewing all the courses under a department
+ACCESS  PUBLIC
+ */
+router.get("/all", (request, response) => {
+    Student.findOne({ firebaseUID: request.body.firebaseUID }).then(
+        (student) => {
+            if (!student) {
+                return response.status(400).json({ accessDenied: "No student available for that given ID." });
+            }
+            Department.findOne({ _id: request.body.departmentID }).then(
+                (department) => {
+                    if (!department) {
+                        return response.status(400).json({ accessDenied: "No such department available." });
+                    } else {
+                        Course.find({}, (error, course) => {
+                            if (error) {
+                                throw error;
+                            }
+
+                            var courses = [];
+
+                            course.forEach((cours) => {
+                                if (department._id.toString() === cours.departmentID.toString()) {
+                                    courses.push(cours);
+                                }
+                            });
+                            response.json(courses);
+                        });
+                    }
+                }
+            ).catch(
+                (error) => console.log("Couldn't show all courses in that department: " + error),
+            );
+        }
+    ).catch(
+        (error) => console.log("Couldn't show all courses in that department: " + error),
+    );
+});
+
+/*
+TYPE    DELETE
+ROUTE   /api/department/course/delete
+DESC    Route for deleting a course under a department
+ACCESS  PRIVATE
+ */
 
 module.exports = router;
