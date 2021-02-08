@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 const authenticateStudent = require("./routes/api/authenticateStudent");
 const updateStudentProfile = require("./routes/api/updateStudentProfile");
 const department = require("./routes/api/department");
+const course = require("./routes/api/course");
 
 // MongoDB configuration
 const db = require("./setup/urls").mongoURL;
@@ -39,6 +40,7 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useFindA
 app.use("/api/auth", authenticateStudent);
 app.use("/api/student/update", updateStudentProfile);
 app.use("/api/department", department);
+app.use("/api", course);
 
 // app.listen(PORT, HOST, () => console.log(`Server is running on http://${HOST}:${PORT}`));
 app.listen(PORT, HOST, () => console.log(`Server is running on http://${HOST}:${PORT}`));
