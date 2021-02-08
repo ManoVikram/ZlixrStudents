@@ -6,7 +6,7 @@ const Student = require("../../models/Student");
 
 /*
 TYPE    POST
-ROUTE   /api/update/
+ROUTE   /api/student/update/
 DESC    Route for updating student details
 ACCESS  PRIVATE
  */

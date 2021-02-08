@@ -3,10 +3,11 @@ const Schema = mongoose.Schema;
 
 const CourseSchema = new Schema(
     {
-        department: {
+        departmentID: {
             type: Schema.Types.ObjectId,
+            ref: "department",
         },
-        degreeName: {
+        courseName: {
             type: String,
         },
     },

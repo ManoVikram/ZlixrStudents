@@ -5,6 +5,7 @@ const DepartmentSchema = new Schema(
     {
         name: {
             type: String,
+            required: true,
         },
         hod: {
             type: Schema.Types.ObjectId,
