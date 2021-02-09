@@ -104,5 +104,34 @@ ROUTE   /api/department/course/delete
 DESC    Route for deleting a course under a department
 ACCESS  PRIVATE
  */
+router.delete("/delete", (request, response) => {
+    if (request.body.firebaseUID == "Yw1et8lu8lXPrkTHxxTR2o6tB1p1") {
+        Student.findOne({ firebaseUID: request.body.firebaseUID }).then(
+            (student) => {
+                if (!student) {
+                    return response.status(400).json({ accessDenied: "You don't have right to access this route." });
+                } else {
+                    Department.findOne({ _id: request.body.departmentID }).then(
+                        (department) => {
+                            if (!department) {
+                                return response.status(400).json({ departmentUnavailable: "The department containing the course in unavailable." });
+                            } else {
+                                Course.findOneAndDelete({ _id: request.body.courseID }).then(
+                                    () => response.json({ success: "Successfully deleted course." }),
+                                ).catch(
+                                    (error) => console.log("Error deleting the course." + error),
+                                );
+                            }
+                        }
+                    ).catch(
+                        (error) => console.log("Error while deleting the course." + error),
+                    );
+                }
+            }
+        ).catch(
+            (error) => console.log("Error deleting the course." + error),
+        );
+    }
+});
 
 module.exports = router;
