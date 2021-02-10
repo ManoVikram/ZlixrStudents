@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 import './signupScreen.dart';
 
@@ -21,6 +22,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordTextController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   UserCredential _userCredential;
+
+  @override
+  void dispose() {
+    _emailTextController.dispose();
+    _passwordTextController.dispose();
+    super.dispose();
+  }
 
   Widget _textField(String labelText, bool isPassword) {
     return TextFormField(
@@ -106,6 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
       resizeToAvoidBottomPadding: false,
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

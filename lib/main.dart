@@ -4,8 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import './screens/loginScreen.dart';
 import './screens/signupScreen.dart';
+import './screens/onboardingScreen.dart';
+import './screens/dataFormScreen.dart';
 
 import './models/registerStudentBloc/registerStudent_bloc.dart';
+import './models/updateStudentBloc/updateStudentData_bloc.dart';
 
 class MyApp extends StatefulWidget {
   @override
@@ -20,6 +23,9 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<RegisterStudentBloc>(
           create: (contxt) => RegisterStudentBloc(),
         ),
+        BlocProvider<UpdateStudentDataBloc>(
+          create: (contxt) => UpdateStudentDataBloc(),
+        )
       ],
       child: MaterialApp(
         title: "Zlixr Students",
@@ -28,6 +34,7 @@ class _MyAppState extends State<MyApp> {
         routes: {
           LoginScreen.routeName: (contxt) => LoginScreen(),
           SignUpScreen.routeName: (contxt) => SignUpScreen(),
+          DataFormScreen.routeName: (contxt) => DataFormScreen(),
         },
       ),
     );
@@ -52,7 +59,7 @@ class ZlixrStudents extends StatelessWidget {
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
-          return LoginScreen();
+          return DataFormScreen();
         }
 
         return Center(

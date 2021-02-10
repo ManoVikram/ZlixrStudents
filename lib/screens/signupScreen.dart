@@ -24,6 +24,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   UserCredential _userCredential;
 
+  @override
+  void dispose() {
+    _emailTextController.dispose();
+    _passwordTextController.dispose();
+    super.dispose();
+  }
+
   Widget _textField(String labelText, bool isPassword) {
     return TextFormField(
       controller: isPassword ? _passwordTextController : _emailTextController,
@@ -87,6 +94,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       resizeToAvoidBottomPadding: false,
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
