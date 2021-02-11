@@ -11,7 +11,10 @@ import 'package:integration_test/integration_test.dart';
 
 import 'package:zlixr_students_psg_tech/main.dart' as app;
 
-void main() => run(_testMain);
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  _testMain();
+}
 
 void _testMain() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

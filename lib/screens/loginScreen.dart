@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      // resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
@@ -164,14 +164,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(30),
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           onPressed: _firebaseSignInUser,
-                          elevation: 7,
-                          padding: EdgeInsets.symmetric(
-                            vertical: 20,
-                            horizontal: 40,
+                          style: ElevatedButton.styleFrom(
+                            elevation: 7,
+                            padding: EdgeInsets.symmetric(
+                              vertical: 20,
+                              horizontal: 40,
+                            ),
+                            primary: Colors.indigo,
                           ),
-                          color: Colors.indigo,
                           child: Text(
                             "LOGIN",
                             style: TextStyle(
@@ -198,14 +200,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(30),
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           onPressed: _firebaseGoogleSignInUser,
-                          elevation: 7,
-                          padding: EdgeInsets.symmetric(
-                            vertical: 20,
-                            horizontal: 40,
+                          style: ElevatedButton.styleFrom(
+                            elevation: 7,
+                            padding: EdgeInsets.symmetric(
+                              vertical: 20,
+                              horizontal: 40,
+                            ),
+                            primary: Colors.white,
                           ),
-                          color: Colors.white,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

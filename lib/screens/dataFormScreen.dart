@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class DataFormScreen extends StatefulWidget {
@@ -9,11 +10,21 @@ class DataFormScreen extends StatefulWidget {
   _DataFormScreenState createState() => _DataFormScreenState();
 }
 
-class _DataFormScreenState extends State<DataFormScreen> {
+class _DataFormScreenState extends State<DataFormScreen>
+    with TickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameTextController = TextEditingController();
   final TextEditingController _rollNoTextController = TextEditingController();
   final TextEditingController _phoneTextController = TextEditingController();
+
+  String _dateOfBirth;
+  int _year, _semester;
+  bool _isMenuOpen1 = false, _isMenuOpen2 = false, _isMenuOpen3 = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -21,6 +32,40 @@ class _DataFormScreenState extends State<DataFormScreen> {
     _rollNoTextController.dispose();
     _phoneTextController.dispose();
     super.dispose();
+  }
+
+  List<int> _studyingYear = [
+    1,
+    2,
+    3,
+    4,
+    5,
+  ];
+
+  List<int> _studyingSemester = [
+    1,
+    2,
+  ];
+
+  Future<DateTime> _openCalendar(BuildContext contxt) async {
+    return await showDatePicker(
+      context: contxt,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (contxt, _) => Theme(
+        data: ThemeData.light().copyWith(
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          colorScheme: ColorScheme.light(
+            primary: Colors.redAccent,
+            onPrimary: Colors.white,
+            surface: Colors.deepOrange,
+            onSurface: Colors.black,
+          ),
+        ),
+        child: _,
+      ),
+    );
   }
 
   @override
@@ -198,10 +243,40 @@ class _DataFormScreenState extends State<DataFormScreen> {
                                     ),
                                   ),
                                 ),
+                                NeumorphicText(
+                                  _dateOfBirth == null
+                                      ? ""
+                                      : DateFormat.yMMMd().format(
+                                          DateTime.parse(_dateOfBirth),
+                                        ),
+                                  textAlign: TextAlign.center,
+                                  textStyle: NeumorphicTextStyle(
+                                    fontFamily: GoogleFonts.oxygen().fontFamily,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                  style: NeumorphicStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: NeumorphicButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      await Future.delayed(
+                                        Duration(milliseconds: 500),
+                                      );
+                                      final DateTime _pickedDate =
+                                          await _openCalendar(context);
+                                      final DateFormat _dateFormatter =
+                                          DateFormat("yyyy-MM-dd");
+                                      if (_pickedDate != null) {
+                                        setState(() {
+                                          _dateOfBirth = _dateFormatter
+                                              .format(_pickedDate);
+                                        });
+                                      }
+                                    },
                                     pressed: true,
                                     minDistance: -5,
                                     style: NeumorphicStyle(
@@ -214,6 +289,7 @@ class _DataFormScreenState extends State<DataFormScreen> {
                                     ),
                                     child: Icon(
                                       Icons.calendar_today,
+                                      color: Colors.blueGrey,
                                     ),
                                   ),
                                 ),
@@ -254,7 +330,17 @@ class _DataFormScreenState extends State<DataFormScreen> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: NeumorphicButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      setState(() {
+                                        _isMenuOpen1 = !_isMenuOpen1;
+                                        if (_isMenuOpen2) {
+                                          _isMenuOpen2 = false;
+                                        }
+                                        if (_isMenuOpen3) {
+                                          _isMenuOpen3 = false;
+                                        }
+                                      });
+                                    },
                                     pressed: true,
                                     minDistance: -5,
                                     style: NeumorphicStyle(
@@ -265,7 +351,17 @@ class _DataFormScreenState extends State<DataFormScreen> {
                                       surfaceIntensity: 1.0,
                                       depth: 10,
                                     ),
-                                    child: Icon(Icons.expand_more),
+                                    child: !_isMenuOpen1
+                                        ? Icon(
+                                            Icons.expand_more,
+                                            color: Colors.blueGrey,
+                                            key: UniqueKey(),
+                                          )
+                                        : Icon(
+                                            Icons.close,
+                                            color: Colors.blueGrey,
+                                            key: UniqueKey(),
+                                          ),
                                   ),
                                 ),
                               ],
@@ -302,10 +398,32 @@ class _DataFormScreenState extends State<DataFormScreen> {
                                     ),
                                   ),
                                 ),
+                                NeumorphicText(
+                                  _year?.toString(),
+                                  textAlign: TextAlign.center,
+                                  textStyle: NeumorphicTextStyle(
+                                    fontFamily: GoogleFonts.oxygen().fontFamily,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                  style: NeumorphicStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: NeumorphicButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      setState(() {
+                                        _isMenuOpen2 = !_isMenuOpen2;
+                                        if (_isMenuOpen1) {
+                                          _isMenuOpen1 = false;
+                                        }
+                                        if (_isMenuOpen3) {
+                                          _isMenuOpen3 = false;
+                                        }
+                                      });
+                                    },
                                     pressed: true,
                                     minDistance: -5,
                                     style: NeumorphicStyle(
@@ -316,7 +434,17 @@ class _DataFormScreenState extends State<DataFormScreen> {
                                       surfaceIntensity: 1.0,
                                       depth: 10,
                                     ),
-                                    child: Icon(Icons.expand_more),
+                                    child: !_isMenuOpen2
+                                        ? Icon(
+                                            Icons.expand_more,
+                                            color: Colors.blueGrey,
+                                            key: UniqueKey(),
+                                          )
+                                        : Icon(
+                                            Icons.close,
+                                            color: Colors.blueGrey,
+                                            key: UniqueKey(),
+                                          ),
                                   ),
                                 ),
                               ],
@@ -356,7 +484,17 @@ class _DataFormScreenState extends State<DataFormScreen> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: NeumorphicButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      setState(() {
+                                        _isMenuOpen3 = !_isMenuOpen3;
+                                        if (_isMenuOpen1) {
+                                          _isMenuOpen1 = false;
+                                        }
+                                        if (_isMenuOpen2) {
+                                          _isMenuOpen2 = false;
+                                        }
+                                      });
+                                    },
                                     pressed: true,
                                     minDistance: -5,
                                     style: NeumorphicStyle(
@@ -367,7 +505,15 @@ class _DataFormScreenState extends State<DataFormScreen> {
                                       surfaceIntensity: 1.0,
                                       depth: 10,
                                     ),
-                                    child: Icon(Icons.expand_more),
+                                    child: !_isMenuOpen3
+                                        ? Icon(
+                                            Icons.expand_more,
+                                            color: Colors.blueGrey,
+                                          )
+                                        : Icon(
+                                            Icons.close,
+                                            color: Colors.blueGrey,
+                                          ),
                                   ),
                                 ),
                               ],
@@ -380,7 +526,7 @@ class _DataFormScreenState extends State<DataFormScreen> {
                 ),
                 Flexible(
                   child: FractionallySizedBox(
-                    heightFactor: 0.20,
+                    heightFactor: 0.25,
                   ),
                 ),
                 Container(

@@ -91,7 +91,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final registerStudentBloc = BlocProvider.of<RegisterStudentBloc>(context);
 
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      // resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
@@ -115,7 +115,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(30),
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           onPressed: () async {
                             await _firebaseCreateUser();
                             await registerStudentBloc.add(RegisterStudent(
@@ -123,12 +123,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               email: _userCredential.user.email,
                             ));
                           },
-                          elevation: 7,
-                          padding: EdgeInsets.symmetric(
-                            vertical: 20,
-                            horizontal: 40,
+                          style: ElevatedButton.styleFrom(
+                            elevation: 7,
+                            padding: EdgeInsets.symmetric(
+                              vertical: 20,
+                              horizontal: 40,
+                            ),
+                            primary: Colors.indigo,
                           ),
-                          color: Colors.indigo,
                           child: Text(
                             "SIGN UP",
                             style: TextStyle(

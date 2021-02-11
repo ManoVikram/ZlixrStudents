@@ -116,23 +116,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             ),
                           ),
                           if (_screenNumber != 2)
-                            FlatButton(
+                            TextButton(
                               onPressed: () {
                                 // TODO: Create a Navigator to navigate to login/signup screen
                               },
-                              height: size.height * 0.1,
-                              minWidth: size.width > 600
-                                  ? size.width * 0.4
-                                  : size.width * 0.9,
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
+                              style: TextButton.styleFrom(
+                                minimumSize: Size(
+                                  size.width > 600
+                                      ? size.width * 0.4
+                                      : size.width * 0.9,
+                                  size.height * 0.075,
+                                ),
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                ),
                               ),
-                              textColor: Colors.black,
                               child: Text(
                                 "Skip",
                                 style: TextStyle(
                                   fontSize: 18,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -150,32 +158,32 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ), */
                           if (_screenNumber == 2)
-                            FlatButton(
+                            TextButton(
                               onPressed: () {
                                 // TODO: Create a Navigator to navigate to login/signup screen
                               },
-                              height: size.height * 0.1,
-                              minWidth: size.width > 600
-                                  ? size.width * 0.4
-                                  : size.width * 0.9,
-                              color: Colors.tealAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
+                              style: TextButton.styleFrom(
+                                minimumSize: Size(
+                                  size.width > 600
+                                      ? size.width * 0.4
+                                      : size.width * 0.9,
+                                  size.height * 0.075,
+                                ),
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                ),
                               ),
-                              textColor: Colors.white,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    "Get Started",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Icon(Icons.navigate_next),
-                                ],
+                              child: Text(
+                                "Skip",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                         ],
@@ -200,23 +208,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             ),
                           ),
                           if (_screenNumber != 2)
-                            FlatButton(
+                            TextButton(
                               onPressed: () {
                                 // TODO: Create a Navigator to navigate to login/signup screen
                               },
-                              height: size.height * 0.075,
-                              minWidth: size.width > 600
-                                  ? size.width * 0.4
-                                  : size.width * 0.9,
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
+                              style: TextButton.styleFrom(
+                                minimumSize: Size(
+                                  size.width > 600
+                                      ? size.width * 0.4
+                                      : size.width * 0.9,
+                                  size.height * 0.075,
+                                ),
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                ),
                               ),
-                              textColor: Colors.black,
                               child: Text(
                                 "Skip",
                                 style: TextStyle(
                                   fontSize: 18,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -234,19 +250,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ), */
                           if (_screenNumber == 2)
-                            FlatButton(
+                            TextButton(
                               onPressed: () {
                                 // TODO: Create a Navigator to navigate to login/signup screen
                               },
-                              height: size.height * 0.075,
-                              minWidth: size.width > 600
-                                  ? size.width * 0.4
-                                  : size.width * 0.9,
-                              color: Colors.tealAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
+                              style: TextButton.styleFrom(
+                                minimumSize: Size(
+                                  size.width > 600
+                                      ? size.width * 0.4
+                                      : size.width * 0.9,
+                                  size.height * 0.075,
+                                ),
+                                backgroundColor: Colors.tealAccent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                ),
                               ),
-                              textColor: Colors.white,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.min,
@@ -255,10 +277,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                     "Get Started",
                                     style: TextStyle(
                                       fontSize: 18,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Icon(Icons.navigate_next),
+                                  Icon(
+                                    Icons.navigate_next,
+                                    color: Colors.white,
+                                  ),
                                 ],
                               ),
                             ),
