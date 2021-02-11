@@ -9,7 +9,6 @@ import './screens/dataFormScreen.dart';
 
 import './models/registerStudentBloc/registerStudent_bloc.dart';
 import './models/updateStudentBloc/updateStudentData_bloc.dart';
-import 'screens/onboardingScreen.dart';
 
 class MyApp extends StatefulWidget {
   @override
@@ -60,7 +59,7 @@ class ZlixrStudents extends StatelessWidget {
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
-          return LoginScreen();
+          return DataFormScreen();
         }
 
         return Center(
