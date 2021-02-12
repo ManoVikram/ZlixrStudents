@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+
+import '../widgets/animatedDropdown.dart';
 
 class DataFormScreen extends StatefulWidget {
   static const String routeName = "/dataForm";
@@ -18,9 +21,6 @@ class _DataFormScreenState extends State<DataFormScreen>
   final TextEditingController _phoneTextController = TextEditingController();
 
   AnimationController _animationController;
-  Animation<Size> _heightAnimation;
-  Animation<double> _opacityAnimation;
-  Animation<Offset> _slideAnimation;
 
   String _dateOfBirth;
   int _year, _semester;
@@ -32,36 +32,6 @@ class _DataFormScreenState extends State<DataFormScreen>
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 500),
-    );
-
-    _heightAnimation = Tween(
-      begin: Size(double.infinity, 0),
-      end: Size(double.infinity, 350),
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeIn,
-      ),
-    );
-
-    _opacityAnimation = Tween(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeIn,
-      ),
-    );
-
-    _slideAnimation = Tween<Offset>(
-      begin: Offset(0, 0),
-      end: Offset(0, 0),
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeIn,
-      ),
     );
   }
 
@@ -131,12 +101,10 @@ class _DataFormScreenState extends State<DataFormScreen>
 
     return Material(
       child: SafeArea(
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Container(
-            margin: EdgeInsets.all(16.0),
-            height: size.height,
-            width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -156,10 +124,8 @@ class _DataFormScreenState extends State<DataFormScreen>
                   ),
                   textAlign: TextAlign.center,
                 ),
-                Flexible(
-                  child: FractionallySizedBox(
-                    heightFactor: 0.20,
-                  ),
+                SizedBox(
+                  height: 25,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -207,8 +173,6 @@ class _DataFormScreenState extends State<DataFormScreen>
                     ),
                     child: TextFormField(
                       controller: _rollNoTextController,
-                      autocorrect: true,
-                      enableSuggestions: true,
                       keyboardType: TextInputType.text,
                       cursorColor: Colors.cyanAccent,
                       cursorHeight: 24.0,
@@ -242,8 +206,6 @@ class _DataFormScreenState extends State<DataFormScreen>
                     ),
                     child: TextFormField(
                       controller: _phoneTextController,
-                      autocorrect: true,
-                      enableSuggestions: true,
                       keyboardType: TextInputType.phone,
                       cursorColor: Colors.cyanAccent,
                       cursorHeight: 24.0,
@@ -380,11 +342,6 @@ class _DataFormScreenState extends State<DataFormScreen>
                             padding: const EdgeInsets.all(8.0),
                             child: NeumorphicButton(
                               onPressed: () {
-                                if (!_isMenuOpen1) {
-                                  _animationController.forward();
-                                } else {
-                                  _animationController.reverse();
-                                }
                                 setState(() {
                                   _isMenuOpen1 = !_isMenuOpen1;
 
@@ -423,56 +380,9 @@ class _DataFormScreenState extends State<DataFormScreen>
                     ),
                   ),
                 ),
-                Padding(
-                  padding: _isMenuOpen1
-                      ? const EdgeInsets.all(8.0)
-                      : const EdgeInsets.all(0.0),
-                  child: Neumorphic(
-                    style: NeumorphicStyle(
-                      shadowLightColorEmboss: Colors.white,
-                      shadowDarkColorEmboss: Colors.blueGrey[100],
-                      color: Colors.grey[100],
-                      depth: 10,
-                    ),
-                    child: AnimatedContainer(
-                      duration: Duration(
-                        milliseconds: 500,
-                      ),
-                      constraints: BoxConstraints(
-                        minHeight: _isMenuOpen1 ? 50 : 0,
-                        maxHeight: _isMenuOpen1 ? 200 : 0,
-                      ),
-                      curve: Curves.easeIn,
-                      child: FadeTransition(
-                        opacity: _opacityAnimation,
-                        child: SlideTransition(
-                          position: _slideAnimation,
-                          child: ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                            itemBuilder: (contxt, index) => Column(
-                              children: [
-                                ListTile(
-                                  leading: Icon(
-                                    Icons.arrow_right,
-                                    color: Colors.redAccent,
-                                  ),
-                                  title: Text(
-                                    _department[index],
-                                    style: TextStyle(
-                                      fontFamily:
-                                          GoogleFonts.oxygen().fontFamily,
-                                    ),
-                                  ),
-                                ),
-                                Divider(),
-                              ],
-                            ),
-                            itemCount: _department.length,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                AnimatedDropdown(
+                  dataList: _department,
+                  isOpen: _isMenuOpen1,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -555,49 +465,9 @@ class _DataFormScreenState extends State<DataFormScreen>
                     ),
                   ),
                 ),
-                Padding(
-                  padding: _isMenuOpen2
-                      ? const EdgeInsets.all(8.0)
-                      : const EdgeInsets.all(0.0),
-                  child: Neumorphic(
-                    style: NeumorphicStyle(
-                      shadowLightColorEmboss: Colors.white,
-                      shadowDarkColorEmboss: Colors.blueGrey[100],
-                      color: Colors.grey[100],
-                      depth: 10,
-                    ),
-                    child: AnimatedContainer(
-                      duration: Duration(
-                        milliseconds: 500,
-                      ),
-                      constraints: BoxConstraints(
-                        minHeight: _isMenuOpen2 ? 50 : 0,
-                        maxHeight: _isMenuOpen2 ? 200 : 0,
-                      ),
-                      curve: Curves.easeIn,
-                      child: ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: (contxt, index) => Column(
-                          children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.arrow_right,
-                                color: Colors.redAccent,
-                              ),
-                              title: Text(
-                                _studyingYear[index].toString(),
-                                style: TextStyle(
-                                  fontFamily: GoogleFonts.oxygen().fontFamily,
-                                ),
-                              ),
-                            ),
-                            Divider(),
-                          ],
-                        ),
-                        itemCount: _studyingYear.length,
-                      ),
-                    ),
-                  ),
+                AnimatedDropdown(
+                  dataList: _studyingYear,
+                  isOpen: _isMenuOpen2,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -678,54 +548,12 @@ class _DataFormScreenState extends State<DataFormScreen>
                     ),
                   ),
                 ),
-                Padding(
-                  padding: _isMenuOpen3
-                      ? const EdgeInsets.all(8.0)
-                      : const EdgeInsets.all(0.0),
-                  child: Neumorphic(
-                    style: NeumorphicStyle(
-                      shadowLightColorEmboss: Colors.white,
-                      shadowDarkColorEmboss: Colors.blueGrey[100],
-                      color: Colors.grey[100],
-                      depth: 10,
-                    ),
-                    child: AnimatedContainer(
-                      duration: Duration(
-                        milliseconds: 500,
-                      ),
-                      constraints: BoxConstraints(
-                        minHeight: _isMenuOpen3 ? 50 : 0,
-                        maxHeight: _isMenuOpen3 ? 200 : 0,
-                      ),
-                      curve: Curves.easeIn,
-                      child: ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: (contxt, index) => Column(
-                          children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.arrow_right,
-                                color: Colors.redAccent,
-                              ),
-                              title: Text(
-                                _studyingSemester[index].toString(),
-                                style: TextStyle(
-                                  fontFamily: GoogleFonts.oxygen().fontFamily,
-                                ),
-                              ),
-                            ),
-                            Divider(),
-                          ],
-                        ),
-                        itemCount: _studyingSemester.length,
-                      ),
-                    ),
-                  ),
+                AnimatedDropdown(
+                  dataList: _studyingSemester,
+                  isOpen: _isMenuOpen3,
                 ),
-                Flexible(
-                  child: FractionallySizedBox(
-                    heightFactor: 0.25,
-                  ),
+                SizedBox(
+                  height: 25,
                 ),
                 Container(
                   height: 65,
