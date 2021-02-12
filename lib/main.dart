@@ -7,8 +7,9 @@ import './screens/signupScreen.dart';
 import './screens/onboardingScreen.dart';
 import './screens/dataFormScreen.dart';
 
-import './models/registerStudentBloc/registerStudent_bloc.dart';
-import './models/updateStudentBloc/updateStudentData_bloc.dart';
+import './models/bloc/registerStudentBloc/registerStudent_bloc.dart';
+import './models/bloc/updateStudentBloc/updateStudentData_bloc.dart';
+import './models/bloc/departmentDataBloc/departmentData_bloc.dart';
 
 class MyApp extends StatefulWidget {
   @override
@@ -25,7 +26,10 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<UpdateStudentDataBloc>(
           create: (contxt) => UpdateStudentDataBloc(),
-        )
+        ),
+        BlocProvider<DepartmentDataBloc>(
+          create: (contxt) => DepartmentDataBloc(),
+        ),
       ],
       child: MaterialApp(
         title: "Zlixr Students",

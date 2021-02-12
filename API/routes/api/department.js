@@ -47,12 +47,12 @@ router.post("/new", (request, response) => {
 });
 
 /*
-TYPE    GET
+TYPE    POST
 ROUTE   /api/department/all
 DESC    Route for viewing all the available departments
 ACCESS  PUBLIC
  */
-router.get("/all", (request, response) => {
+router.post("/all", (request, response) => {
     Student.findOne({ firebaseUID: request.body.firebaseUID }).then(
         (student) => {
             if (!student) {
@@ -68,7 +68,7 @@ router.get("/all", (request, response) => {
                 department.forEach((dept) => {
                     departments.push(dept);
                 });
-                response.json(departments);
+                response.json({allDepartments: departments});
             });
         }
     ).catch(

@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
-import '../../GLOBALS.dart';
+import '../../../GLOBALS.dart';
 
 part 'updateStudentData_event.dart';
 part 'updateStudentData_state.dart';

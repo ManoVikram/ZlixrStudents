@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import './loginScreen.dart';
 
-import '../models/registerStudentBloc/registerStudent_bloc.dart';
+import '../models/bloc/registerStudentBloc/registerStudent_bloc.dart';
 
 class SignUpScreen extends StatefulWidget {
   static const String routeName = "/signUpScreen";

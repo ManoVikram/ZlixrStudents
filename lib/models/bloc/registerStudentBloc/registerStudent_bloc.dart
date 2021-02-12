@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
-import '../../GLOBALS.dart';
+import '../../../GLOBALS.dart';
 
 part 'registerStudent_event.dart';
 part 'registerStudent_state.dart';
