@@ -25,6 +25,7 @@ router.post("/", (request, response) => {
             if (request.body.studentRollNo) studentProfileValues.studentRollNo = request.body.studentRollNo;
             if (request.body.dateOfBirth) studentProfileValues.dateOfBirth = new Date(request.body.dateOfBirth);
             if (request.body.degreeID) studentProfileValues.degreeID = request.body.degreeID;
+            if (request.body.batch) studentProfileValues.batch = request.body.batch;
             if (request.body.year) studentProfileValues.year = request.body.year;
             if (request.body.semester) studentProfileValues.semester = request.body.semester;
 

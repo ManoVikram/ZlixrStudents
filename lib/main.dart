@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import './screens/loginScreen.dart';
 import './screens/signupScreen.dart';
@@ -10,6 +11,9 @@ import './screens/dataFormScreen.dart';
 import './models/bloc/registerStudentBloc/registerStudent_bloc.dart';
 import './models/bloc/updateStudentBloc/updateStudentData_bloc.dart';
 import './models/bloc/departmentDataBloc/departmentData_bloc.dart';
+import './models/bloc/courseDataBloc/courseData_bloc.dart';
+
+import './models/provider/studentInfo.dart';
 
 class MyApp extends StatefulWidget {
   @override
@@ -30,16 +34,26 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<DepartmentDataBloc>(
           create: (contxt) => DepartmentDataBloc(),
         ),
+        BlocProvider<CourseDataBloc>(
+          create: (context) => CourseDataBloc(),
+        ),
       ],
-      child: MaterialApp(
-        title: "Zlixr Students",
-        debugShowCheckedModeBanner: false,
-        home: ZlixrStudents(),
-        routes: {
-          LoginScreen.routeName: (contxt) => LoginScreen(),
-          SignUpScreen.routeName: (contxt) => SignUpScreen(),
-          DataFormScreen.routeName: (contxt) => DataFormScreen(),
-        },
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (contxt) => StudentInfo(),
+          ),
+        ],
+        child: MaterialApp(
+          title: "Zlixr Students",
+          debugShowCheckedModeBanner: false,
+          home: ZlixrStudents(),
+          routes: {
+            LoginScreen.routeName: (contxt) => LoginScreen(),
+            SignUpScreen.routeName: (contxt) => SignUpScreen(),
+            DataFormScreen.routeName: (contxt) => DataFormScreen(),
+          },
+        ),
       ),
     );
   }

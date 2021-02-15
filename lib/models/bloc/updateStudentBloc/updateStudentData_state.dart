@@ -6,6 +6,8 @@ class UpdateData {
   final String studentRollNo;
   final DateTime dateOfBirth;
   final dynamic degreeID;
+  final dynamic courseID;
+  final int batch;
   final int year;
   final int semester;
 
@@ -15,6 +17,8 @@ class UpdateData {
     this.studentRollNo,
     this.dateOfBirth,
     this.degreeID,
+    this.courseID,
+    this.batch,
     this.year,
     this.semester,
   });

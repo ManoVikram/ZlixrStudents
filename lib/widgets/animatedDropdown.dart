@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
+import '../models/bloc/departmentDataBloc/departmentData_bloc.dart';
+
 class AnimatedDropdown extends StatefulWidget {
   final List<dynamic> dataList;
   final bool isOpen;
@@ -22,6 +24,8 @@ class _AnimatedDropdownState extends State<AnimatedDropdown>
   Animation<Size> _heightAnimation;
   Animation<double> _opacityAnimation;
   Animation<Offset> _slideAnimation;
+
+  List<dynamic> _listData = [];
 
   @override
   void initState() {
@@ -60,6 +64,14 @@ class _AnimatedDropdownState extends State<AnimatedDropdown>
         curve: Curves.easeIn,
       ),
     );
+
+    if (widget.dataList is List<DepartmentData>) {
+      print(widget.dataList[0].departmentName);
+      for (DepartmentData department in widget.dataList) {
+        _listData.add(department.departmentName);
+      }
+      print("LIST: " + _listData.toString());
+    }
   }
 
   @override
@@ -115,7 +127,9 @@ class _AnimatedDropdownState extends State<AnimatedDropdown>
                         color: Colors.cyanAccent,
                       ),
                       title: Text(
-                        widget.dataList[index].toString(),
+                        _listData[index].toString(),
+                        softWrap: true,
+                        // overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontFamily: GoogleFonts.oxygen().fontFamily,
                         ),
@@ -125,7 +139,7 @@ class _AnimatedDropdownState extends State<AnimatedDropdown>
                   Divider(),
                 ],
               ),
-              itemCount: widget.dataList.length,
+              itemCount: _listData?.length,
             ),
           ),
         ),

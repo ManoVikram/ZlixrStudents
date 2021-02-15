@@ -7,6 +7,8 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../GLOBALS.dart';
+
 part 'departmentData_event.dart';
 part 'departmentData_state.dart';
 
@@ -17,7 +19,8 @@ class DepartmentDataBloc
   @override
   Stream<DepartmentDataState> mapEventToState(
       DepartmentDataEvent event) async* {
-    const String url = "http://192.168.43.50:3000/api/department/all";
+    const String url = "http://$API_HOST/api/department/all";
+    print(url);
 
     if (event is FetchDepartmentData) {
       final response = await http.post(
@@ -28,15 +31,18 @@ class DepartmentDataBloc
       );
 
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
-      print(extractedData);
+      print(extractedData["allDepartments"]);
 
-      List<DepartmentData> departmentList = extractedData["allDepartments"].map(
-        (department) => DepartmentData(
-          departmentID: department["_id"],
-          departmentName: department["name"],
-          hod: department["hod"] ?? null,
-        ),
-      );
+      List<DepartmentData> departmentList = [];
+      for (var departments in extractedData["allDepartments"]) {
+        departmentList.add(
+          DepartmentData(
+            departmentID: departments["_id"],
+            departmentName: departments["name"],
+            hod: departments["hod"] ?? null,
+          ),
+        );
+      }
 
       DepartmentDataState loadedData = DepartmentDataState(
         departmentData: departmentList,

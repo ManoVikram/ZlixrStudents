@@ -14,6 +14,8 @@ class UpdateStudentData extends UpdateStudentDataEvent {
   final String studentRollNo;
   final DateTime dateOfBirth;
   final dynamic degreeID;
+  final dynamic courseID;
+  final int batch;
   final int year;
   final int semester;
 
@@ -24,6 +26,8 @@ class UpdateStudentData extends UpdateStudentDataEvent {
     this.studentRollNo,
     this.dateOfBirth,
     this.degreeID,
+    this.courseID,
+    this.batch,
     this.year,
     this.semester,
   });

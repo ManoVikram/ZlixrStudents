@@ -29,8 +29,9 @@ class UpdateStudentDataBloc
           "studentRollNo": event.studentRollNo,
           "dateOfBirth": event.dateOfBirth,
           "degreeID": event.degreeID,
-          "year": event.year,
-          "semester": event.semester,
+          "batch": event.batch,
+          "year": event.year ?? null,
+          "semester": event.semester ?? null,
         },
       );
 

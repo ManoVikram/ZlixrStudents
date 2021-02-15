@@ -3,8 +3,15 @@ import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/animatedDropdown.dart';
+
+import '../models/bloc/registerStudentBloc/registerStudent_bloc.dart';
+import '../models/bloc/departmentDataBloc/departmentData_bloc.dart';
+
+import '../models/provider/studentInfo.dart';
 
 class DataFormScreen extends StatefulWidget {
   static const String routeName = "/dataForm";
@@ -24,7 +31,10 @@ class _DataFormScreenState extends State<DataFormScreen>
 
   String _dateOfBirth;
   int _year, _semester;
-  bool _isMenuOpen1 = false, _isMenuOpen2 = false, _isMenuOpen3 = false;
+  bool _isMenuOpen1 = false,
+      _isMenuOpen2 = false,
+      _isMenuOpen3 = false,
+      _isMenuOpen4 = false;
 
   @override
   void initState() {
@@ -97,6 +107,9 @@ class _DataFormScreenState extends State<DataFormScreen>
 
   @override
   Widget build(BuildContext context) {
+    final departmentBloc = BlocProvider.of<DepartmentDataBloc>(context);
+    final studentInfoProvider = context.watch<StudentInfo>();
+
     final Size size = MediaQuery.of(context).size;
 
     return Material(
@@ -257,10 +270,11 @@ class _DataFormScreenState extends State<DataFormScreen>
                             ),
                           ),
                           NeumorphicText(
-                            _dateOfBirth == null
+                            studentInfoProvider.studentInfo?.dob == null
                                 ? ""
                                 : DateFormat.yMMMd().format(
-                                    DateTime.parse(_dateOfBirth),
+                                    DateTime.parse(
+                                        studentInfoProvider.studentInfo?.dob),
                                   ),
                             textAlign: TextAlign.center,
                             textStyle: NeumorphicTextStyle(
@@ -285,7 +299,7 @@ class _DataFormScreenState extends State<DataFormScreen>
                                     DateFormat("yyyy-MM-dd");
                                 if (_pickedDate != null) {
                                   setState(() {
-                                    _dateOfBirth =
+                                    studentInfoProvider.dob =
                                         _dateFormatter.format(_pickedDate);
                                   });
                                 }
@@ -310,6 +324,117 @@ class _DataFormScreenState extends State<DataFormScreen>
                     ),
                   ),
                 ),
+                BlocBuilder<RegisterStudentBloc, RegisterStudentState>(
+                  builder: (context, state) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Neumorphic(
+                        style: NeumorphicStyle(
+                          shadowLightColorEmboss: Colors.white,
+                          shadowDarkColorEmboss: Colors.blueGrey[100],
+                          color: Colors.grey[100],
+                          depth: 10,
+                        ),
+                        child: Container(
+                          height: 65,
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  "Department",
+                                  style: TextStyle(
+                                    color: Colors.deepOrange,
+                                    fontFamily: GoogleFonts.oxygen().fontFamily,
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Consumer<StudentInfo>(
+                                builder: (contxt, data, _) => NeumorphicText(
+                                  "",
+                                  textAlign: TextAlign.center,
+                                  textStyle: NeumorphicTextStyle(
+                                    fontFamily: GoogleFonts.oxygen().fontFamily,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                  style: NeumorphicStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: NeumorphicButton(
+                                  onPressed: () async {
+                                    departmentBloc.add(
+                                      FetchDepartmentData(
+                                        // firebaseUID:
+                                        //     state.studentData.firebaseUID,
+                                        firebaseUID:
+                                            "Yw1et8lu8lXPrkTHxxTR2o6tB1p1",
+                                      ),
+                                    );
+                                    await Future.delayed(
+                                      Duration(seconds: 1),
+                                    );
+                                    setState(() {
+                                      _isMenuOpen1 = !_isMenuOpen1;
+
+                                      if (_isMenuOpen2) {
+                                        _isMenuOpen2 = false;
+                                      }
+                                      if (_isMenuOpen3) {
+                                        _isMenuOpen3 = false;
+                                      }
+                                      if (_isMenuOpen4) {
+                                        _isMenuOpen4 = false;
+                                      }
+                                    });
+                                  },
+                                  pressed: true,
+                                  minDistance: -5,
+                                  style: NeumorphicStyle(
+                                    shadowLightColorEmboss: Colors.white,
+                                    shadowDarkColorEmboss: Colors.blueGrey[100],
+                                    color: Colors.grey[100],
+                                    surfaceIntensity: 1.0,
+                                    depth: 10,
+                                  ),
+                                  child: !_isMenuOpen1
+                                      ? Icon(
+                                          Icons.expand_more,
+                                          color: Colors.blueGrey,
+                                          key: UniqueKey(),
+                                        )
+                                      : Icon(
+                                          Icons.close,
+                                          color: Colors.blueGrey,
+                                          key: UniqueKey(),
+                                        ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                BlocBuilder<DepartmentDataBloc, DepartmentDataState>(
+                  builder: (context, state) {
+                    return AnimatedDropdown(
+                      dataList: state.departmentData,
+                      // dataList: _department, // temporary
+                      isOpen: _isMenuOpen1,
+                    );
+                  },
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Neumorphic(
@@ -329,7 +454,7 @@ class _DataFormScreenState extends State<DataFormScreen>
                           Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Text(
-                              "Department",
+                              "Course",
                               style: TextStyle(
                                 color: Colors.deepOrange,
                                 fontFamily: GoogleFonts.oxygen().fontFamily,
@@ -338,18 +463,35 @@ class _DataFormScreenState extends State<DataFormScreen>
                               ),
                             ),
                           ),
+                          Consumer<StudentInfo>(
+                            builder: (contxt, data, _) => NeumorphicText(
+                              "",
+                              textAlign: TextAlign.center,
+                              textStyle: NeumorphicTextStyle(
+                                fontFamily: GoogleFonts.oxygen().fontFamily,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w900,
+                              ),
+                              style: NeumorphicStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: NeumorphicButton(
                               onPressed: () {
                                 setState(() {
-                                  _isMenuOpen1 = !_isMenuOpen1;
+                                  _isMenuOpen2 = !_isMenuOpen2;
 
-                                  if (_isMenuOpen2) {
-                                    _isMenuOpen2 = false;
+                                  if (_isMenuOpen1) {
+                                    _isMenuOpen1 = false;
                                   }
                                   if (_isMenuOpen3) {
                                     _isMenuOpen3 = false;
+                                  }
+                                  if (_isMenuOpen4) {
+                                    _isMenuOpen4 = false;
                                   }
                                 });
                               },
@@ -362,7 +504,7 @@ class _DataFormScreenState extends State<DataFormScreen>
                                 surfaceIntensity: 1.0,
                                 depth: 10,
                               ),
-                              child: !_isMenuOpen1
+                              child: !_isMenuOpen2
                                   ? Icon(
                                       Icons.expand_more,
                                       color: Colors.blueGrey,
@@ -381,10 +523,100 @@ class _DataFormScreenState extends State<DataFormScreen>
                   ),
                 ),
                 AnimatedDropdown(
-                  dataList: _department,
-                  isOpen: _isMenuOpen1,
+                  // dataList: state.departmentData,
+                  dataList: _department, // temporary
+                  isOpen: _isMenuOpen2,
                 ),
                 Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Neumorphic(
+                    style: NeumorphicStyle(
+                      shadowLightColorEmboss: Colors.white,
+                      shadowDarkColorEmboss: Colors.blueGrey[100],
+                      color: Colors.grey[100],
+                      depth: 10,
+                    ),
+                    child: Container(
+                      height: 65,
+                      width: double.infinity,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              "Batch",
+                              style: TextStyle(
+                                color: Colors.deepOrange,
+                                fontFamily: GoogleFonts.oxygen().fontFamily,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          NeumorphicText(
+                            _year?.toString(),
+                            textAlign: TextAlign.center,
+                            textStyle: NeumorphicTextStyle(
+                              fontFamily: GoogleFonts.oxygen().fontFamily,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                            ),
+                            style: NeumorphicStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: NeumorphicButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isMenuOpen3 = !_isMenuOpen3;
+
+                                  if (_isMenuOpen1) {
+                                    _isMenuOpen1 = false;
+                                  }
+                                  if (_isMenuOpen2) {
+                                    _isMenuOpen2 = false;
+                                  }
+                                  if (_isMenuOpen4) {
+                                    _isMenuOpen4 = false;
+                                  }
+                                });
+                              },
+                              pressed: true,
+                              minDistance: -5,
+                              style: NeumorphicStyle(
+                                shadowLightColorEmboss: Colors.white,
+                                shadowDarkColorEmboss: Colors.blueGrey[100],
+                                color: Colors.grey[100],
+                                surfaceIntensity: 1.0,
+                                depth: 10,
+                              ),
+                              child: !_isMenuOpen3
+                                  ? Icon(
+                                      Icons.expand_more,
+                                      color: Colors.blueGrey,
+                                      key: UniqueKey(),
+                                    )
+                                  : Icon(
+                                      Icons.close,
+                                      color: Colors.blueGrey,
+                                      key: UniqueKey(),
+                                    ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                AnimatedDropdown(
+                  dataList: _studyingYear,
+                  isOpen: _isMenuOpen3,
+                ),
+                /* Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Neumorphic(
                     style: NeumorphicStyle(
@@ -429,12 +661,16 @@ class _DataFormScreenState extends State<DataFormScreen>
                             child: NeumorphicButton(
                               onPressed: () {
                                 setState(() {
-                                  _isMenuOpen2 = !_isMenuOpen2;
+                                  _isMenuOpen3 = !_isMenuOpen3;
+
                                   if (_isMenuOpen1) {
                                     _isMenuOpen1 = false;
                                   }
-                                  if (_isMenuOpen3) {
-                                    _isMenuOpen3 = false;
+                                  if (_isMenuOpen2) {
+                                    _isMenuOpen2 = false;
+                                  }
+                                  if (_isMenuOpen4) {
+                                    _isMenuOpen4 = false;
                                   }
                                 });
                               },
@@ -447,7 +683,7 @@ class _DataFormScreenState extends State<DataFormScreen>
                                 surfaceIntensity: 1.0,
                                 depth: 10,
                               ),
-                              child: !_isMenuOpen2
+                              child: !_isMenuOpen3
                                   ? Icon(
                                       Icons.expand_more,
                                       color: Colors.blueGrey,
@@ -467,7 +703,7 @@ class _DataFormScreenState extends State<DataFormScreen>
                 ),
                 AnimatedDropdown(
                   dataList: _studyingYear,
-                  isOpen: _isMenuOpen2,
+                  isOpen: _isMenuOpen3,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -514,12 +750,16 @@ class _DataFormScreenState extends State<DataFormScreen>
                             child: NeumorphicButton(
                               onPressed: () {
                                 setState(() {
-                                  _isMenuOpen3 = !_isMenuOpen3;
+                                  _isMenuOpen4 = !_isMenuOpen4;
+
                                   if (_isMenuOpen1) {
                                     _isMenuOpen1 = false;
                                   }
                                   if (_isMenuOpen2) {
                                     _isMenuOpen2 = false;
+                                  }
+                                  if (_isMenuOpen3) {
+                                    _isMenuOpen3 = false;
                                   }
                                 });
                               },
@@ -532,7 +772,7 @@ class _DataFormScreenState extends State<DataFormScreen>
                                 surfaceIntensity: 1.0,
                                 depth: 10,
                               ),
-                              child: !_isMenuOpen3
+                              child: !_isMenuOpen4
                                   ? Icon(
                                       Icons.expand_more,
                                       color: Colors.blueGrey,
@@ -550,8 +790,8 @@ class _DataFormScreenState extends State<DataFormScreen>
                 ),
                 AnimatedDropdown(
                   dataList: _studyingSemester,
-                  isOpen: _isMenuOpen3,
-                ),
+                  isOpen: _isMenuOpen4,
+                ), */
                 SizedBox(
                   height: 25,
                 ),
