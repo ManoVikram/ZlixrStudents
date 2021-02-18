@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 import '../models/bloc/departmentDataBloc/departmentData_bloc.dart';
+import '../models/bloc/courseDataBloc/courseData_bloc.dart';
+
+import '../models/provider/studentInfo.dart';
 
 class AnimatedDropdown extends StatefulWidget {
   final List<dynamic> dataList;
@@ -24,6 +27,7 @@ class _AnimatedDropdownState extends State<AnimatedDropdown>
   Animation<Size> _heightAnimation;
   Animation<double> _opacityAnimation;
   Animation<Offset> _slideAnimation;
+  Animation<Color> _circularProgressIndicatorColor;
 
   List<dynamic> _listData = [];
 
@@ -65,13 +69,14 @@ class _AnimatedDropdownState extends State<AnimatedDropdown>
       ),
     );
 
-    if (widget.dataList is List<DepartmentData>) {
-      print(widget.dataList[0].departmentName);
-      for (DepartmentData department in widget.dataList) {
-        _listData.add(department.departmentName);
-      }
-      print("LIST: " + _listData.toString());
-    }
+    _circularProgressIndicatorColor = _animationController.drive(
+      ColorTween(
+        begin: Colors.indigo,
+        end: Colors.redAccent,
+      ),
+    );
+
+    _animationController.repeat();
   }
 
   @override
@@ -82,6 +87,32 @@ class _AnimatedDropdownState extends State<AnimatedDropdown>
 
   @override
   Widget build(BuildContext context) {
+    final studentInfo = context.watch<StudentInfo>();
+
+    _listData.clear();
+
+    if (widget.dataList is List<DepartmentData>) {
+      print(widget.dataList[0].departmentName);
+      for (DepartmentData department in widget.dataList) {
+        _listData.add(department.departmentName);
+      }
+      print("LIST: " + _listData.toString());
+    }
+
+    if (widget.dataList is List<CourseData>) {
+      for (CourseData course in widget.dataList) {
+        _listData.add(course.courseName);
+      }
+      print("LIST: " + _listData.toString());
+    }
+
+    if (widget.dataList is List<int>) {
+      for (int batch in widget.dataList) {
+        _listData.add(batch);
+      }
+      print("LIST: " + _listData.toString());
+    }
+
     return Padding(
       padding: widget.isOpen
           ? const EdgeInsets.all(8.0)
@@ -103,44 +134,71 @@ class _AnimatedDropdownState extends State<AnimatedDropdown>
               maxHeight: widget.isOpen ? 200 : 0,
             ),
             curve: Curves.easeIn,
-            child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemBuilder: (contxt, index) => Column(
-                children: [
-                  NeumorphicButton(
-                    onPressed: () {},
-                    pressed: true,
-                    minDistance: -10,
-                    style: NeumorphicStyle(
-                      shadowLightColorEmboss: Colors.white,
-                      shadowDarkColorEmboss: Colors.blueGrey[100],
-                      color: Colors.grey[100],
-                      surfaceIntensity: 1.0,
-                      depth: 0,
-                      // boxShape: NeumorphicBoxShape.beveled(
-                      //   BorderRadius.circular(20),
-                      // ),
-                    ),
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.arrow_right,
-                        color: Colors.cyanAccent,
+            child: _listData.isEmpty
+                ? Center(
+                    child: SizedBox(
+                      height: 50.0,
+                      width: 50.0,
+                      child: CircularProgressIndicator(
+                        valueColor: _circularProgressIndicatorColor,
+                        strokeWidth: 2.0,
                       ),
-                      title: Text(
-                        _listData[index].toString(),
-                        softWrap: true,
-                        // overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontFamily: GoogleFonts.oxygen().fontFamily,
+                    ),
+                  )
+                : ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    itemBuilder: (contxt, index) => Column(
+                      children: [
+                        NeumorphicButton(
+                          onPressed: () {
+                            if (widget.dataList is List<DepartmentData>) {
+                              print(_listData[index]);
+                              studentInfo.department = widget.dataList
+                                  .firstWhere((department) =>
+                                      department.departmentName ==
+                                      _listData[index]);
+                            } else if (widget.dataList is List<CourseData>) {
+                              print(_listData[index]);
+                              studentInfo.course = widget.dataList.firstWhere(
+                                  (course) =>
+                                      course.courseName == _listData[index]);
+                            } else {
+                              print(_listData[index]);
+                              studentInfo.batch = _listData[index];
+                            }
+                          },
+                          pressed: true,
+                          minDistance: -10,
+                          style: NeumorphicStyle(
+                            shadowLightColorEmboss: Colors.white,
+                            shadowDarkColorEmboss: Colors.blueGrey[100],
+                            color: Colors.grey[100],
+                            surfaceIntensity: 1.0,
+                            depth: 0,
+                            // boxShape: NeumorphicBoxShape.beveled(
+                            //   BorderRadius.circular(20),
+                            // ),
+                          ),
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.arrow_right,
+                              color: Colors.cyanAccent,
+                            ),
+                            title: Text(
+                              _listData[index].toString(),
+                              softWrap: true,
+                              // overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontFamily: GoogleFonts.oxygen().fontFamily,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        Divider(),
+                      ],
                     ),
+                    itemCount: _listData?.length,
                   ),
-                  Divider(),
-                ],
-              ),
-              itemCount: _listData?.length,
-            ),
           ),
         ),
       ),

@@ -18,6 +18,7 @@ class CourseDataBloc extends Bloc<CourseDataEvent, CourseDataState> {
   @override
   Stream<CourseDataState> mapEventToState(CourseDataEvent event) async* {
     const String url = "http://$API_HOST/api/department/course/all";
+    print(url);
 
     if (event is FetchCourseData) {
       final response = await http.post(
@@ -29,6 +30,7 @@ class CourseDataBloc extends Bloc<CourseDataEvent, CourseDataState> {
       );
 
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      print(extractedData["courses"]);
 
       List<CourseData> coursesList = [];
       for (var courses in extractedData["courses"]) {

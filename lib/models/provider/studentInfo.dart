@@ -1,12 +1,15 @@
 import 'package:flutter/widgets.dart';
 
+import '../bloc/departmentDataBloc/departmentData_bloc.dart';
+import '../bloc/courseDataBloc/courseData_bloc.dart';
+
 class StudentInfoData {
   String name;
   String rollNo;
   String phoneNumber;
   String dob;
-  String department;
-  String course;
+  DepartmentData department;
+  CourseData course;
   int batch;
   int year;
   int semester;
@@ -61,12 +64,13 @@ class StudentInfo with ChangeNotifier {
     notifyListeners();
   }
 
-  set department(String department) {
+  set department(DepartmentData department) {
     _studentInfo.department = department;
+    print(_studentInfo.department);
     notifyListeners();
   }
 
-  set course(String course) {
+  set course(CourseData course) {
     _studentInfo.course = course;
     notifyListeners();
   }

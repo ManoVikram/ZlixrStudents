@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:zlixr_students_psg_tech/models/bloc/courseDataBloc/courseData_bloc.dart';
 
 import '../widgets/animatedDropdown.dart';
 
@@ -36,6 +37,10 @@ class _DataFormScreenState extends State<DataFormScreen>
       _isMenuOpen3 = false,
       _isMenuOpen4 = false;
 
+  List<int> _batchYear = [
+    for (int i = DateTime.now().year; i >= DateTime.now().year - 6; i--) i
+  ].reversed.toList();
+
   @override
   void initState() {
     super.initState();
@@ -53,36 +58,6 @@ class _DataFormScreenState extends State<DataFormScreen>
     _animationController.dispose();
     super.dispose();
   }
-
-  List<String> _department = [
-    "adfasdfas",
-    "adfasdfas",
-    "adfasdfas",
-    "adfasdfas",
-    "adfasdfas",
-    "adfasdfas",
-    "adfasdfas",
-    "adfasdfas",
-    "adfasdfas",
-    "adfasdfas",
-    "adfasdfas",
-    "adfasdfas",
-    "adfasdfas",
-    "adfasdfas",
-  ];
-
-  List<int> _studyingYear = [
-    1,
-    2,
-    3,
-    4,
-    5,
-  ];
-
-  List<int> _studyingSemester = [
-    1,
-    2,
-  ];
 
   Future<DateTime> _openCalendar(BuildContext contxt) async {
     return await showDatePicker(
@@ -108,6 +83,7 @@ class _DataFormScreenState extends State<DataFormScreen>
   @override
   Widget build(BuildContext context) {
     final departmentBloc = BlocProvider.of<DepartmentDataBloc>(context);
+    final courseBloc = BlocProvider.of<CourseDataBloc>(context);
     final studentInfoProvider = context.watch<StudentInfo>();
 
     final Size size = MediaQuery.of(context).size;
@@ -280,7 +256,7 @@ class _DataFormScreenState extends State<DataFormScreen>
                             textStyle: NeumorphicTextStyle(
                               fontFamily: GoogleFonts.oxygen().fontFamily,
                               fontSize: 20,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w500,
                             ),
                             style: NeumorphicStyle(
                               color: Colors.black,
@@ -355,16 +331,22 @@ class _DataFormScreenState extends State<DataFormScreen>
                                 ),
                               ),
                               Consumer<StudentInfo>(
-                                builder: (contxt, data, _) => NeumorphicText(
-                                  "",
-                                  textAlign: TextAlign.center,
-                                  textStyle: NeumorphicTextStyle(
-                                    fontFamily: GoogleFonts.oxygen().fontFamily,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                  style: NeumorphicStyle(
-                                    color: Colors.black,
+                                builder: (contxt, data, _) => Container(
+                                  width: size.width * 0.4,
+                                  child: NeumorphicText(
+                                    studentInfoProvider.studentInfo.department
+                                            ?.departmentName ??
+                                        "",
+                                    textAlign: TextAlign.center,
+                                    textStyle: NeumorphicTextStyle(
+                                      fontFamily:
+                                          GoogleFonts.oxygen().fontFamily,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    style: NeumorphicStyle(
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -372,7 +354,7 @@ class _DataFormScreenState extends State<DataFormScreen>
                                 padding: const EdgeInsets.all(8.0),
                                 child: NeumorphicButton(
                                   onPressed: () async {
-                                    departmentBloc.add(
+                                    await departmentBloc.add(
                                       FetchDepartmentData(
                                         // firebaseUID:
                                         //     state.studentData.firebaseUID,
@@ -380,9 +362,9 @@ class _DataFormScreenState extends State<DataFormScreen>
                                             "Yw1et8lu8lXPrkTHxxTR2o6tB1p1",
                                       ),
                                     );
-                                    await Future.delayed(
+                                    /* await Future.delayed(
                                       Duration(seconds: 1),
-                                    );
+                                    ); */
                                     setState(() {
                                       _isMenuOpen1 = !_isMenuOpen1;
 
@@ -428,9 +410,9 @@ class _DataFormScreenState extends State<DataFormScreen>
                 ),
                 BlocBuilder<DepartmentDataBloc, DepartmentDataState>(
                   builder: (context, state) {
+                    print(state.departmentData);
                     return AnimatedDropdown(
                       dataList: state.departmentData,
-                      // dataList: _department, // temporary
                       isOpen: _isMenuOpen1,
                     );
                   },
@@ -464,23 +446,38 @@ class _DataFormScreenState extends State<DataFormScreen>
                             ),
                           ),
                           Consumer<StudentInfo>(
-                            builder: (contxt, data, _) => NeumorphicText(
-                              "",
-                              textAlign: TextAlign.center,
-                              textStyle: NeumorphicTextStyle(
-                                fontFamily: GoogleFonts.oxygen().fontFamily,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w900,
-                              ),
-                              style: NeumorphicStyle(
-                                color: Colors.black,
+                            builder: (contxt, data, _) => Container(
+                              width: size.width * 0.4,
+                              child: NeumorphicText(
+                                studentInfoProvider
+                                        .studentInfo.course?.courseName ??
+                                    "",
+                                textAlign: TextAlign.center,
+                                textStyle: NeumorphicTextStyle(
+                                  fontFamily: GoogleFonts.oxygen().fontFamily,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                style: NeumorphicStyle(
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: NeumorphicButton(
-                              onPressed: () {
+                              onPressed: () async {
+                                await courseBloc.add(
+                                  FetchCourseData(
+                                    firebaseUID: "Yw1et8lu8lXPrkTHxxTR2o6tB1p1",
+                                    departmentID: studentInfoProvider
+                                        .studentInfo.department?.departmentID,
+                                  ),
+                                );
+                                /* await Future.delayed(
+                                  Duration(seconds: 1),
+                                ); */
                                 setState(() {
                                   _isMenuOpen2 = !_isMenuOpen2;
 
@@ -522,10 +519,13 @@ class _DataFormScreenState extends State<DataFormScreen>
                     ),
                   ),
                 ),
-                AnimatedDropdown(
-                  // dataList: state.departmentData,
-                  dataList: _department, // temporary
-                  isOpen: _isMenuOpen2,
+                BlocBuilder<CourseDataBloc, CourseDataState>(
+                  builder: (context, state) {
+                    return AnimatedDropdown(
+                      dataList: state.courseData,
+                      isOpen: _isMenuOpen2,
+                    );
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -555,22 +555,28 @@ class _DataFormScreenState extends State<DataFormScreen>
                               ),
                             ),
                           ),
-                          NeumorphicText(
-                            _year?.toString(),
-                            textAlign: TextAlign.center,
-                            textStyle: NeumorphicTextStyle(
-                              fontFamily: GoogleFonts.oxygen().fontFamily,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                            ),
-                            style: NeumorphicStyle(
-                              color: Colors.black,
+                          Consumer<StudentInfo>(
+                            builder: (contxt, data, _) => Container(
+                              width: size.width * 0.4,
+                              child: NeumorphicText(
+                                data.studentInfo.batch?.toString() ?? "",
+                                textAlign: TextAlign.center,
+                                textStyle: NeumorphicTextStyle(
+                                  fontFamily: GoogleFonts.oxygen().fontFamily,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                style: NeumorphicStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: NeumorphicButton(
                               onPressed: () {
+                                print(_batchYear);
                                 setState(() {
                                   _isMenuOpen3 = !_isMenuOpen3;
 
@@ -613,7 +619,7 @@ class _DataFormScreenState extends State<DataFormScreen>
                   ),
                 ),
                 AnimatedDropdown(
-                  dataList: _studyingYear,
+                  dataList: _batchYear,
                   isOpen: _isMenuOpen3,
                 ),
                 /* Padding(
