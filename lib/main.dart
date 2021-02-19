@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:after_layout/after_layout.dart';
 
 import './screens/loginScreen.dart';
 import './screens/signupScreen.dart';
@@ -59,30 +61,69 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class ZlixrStudents extends StatelessWidget {
+class ZlixrStudents extends StatefulWidget {
+  @override
+  _ZlixrStudentsState createState() => _ZlixrStudentsState();
+}
+
+class _ZlixrStudentsState extends State<ZlixrStudents>
+    with AfterLayoutMixin<ZlixrStudents> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
+  SharedPreferences preferences;
+  bool _seen;
+
+  Future<void> checkSeenAlready() async {
+    preferences = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkSeenAlready();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) => checkSeenAlready();
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      // Initialize FlutterFire:
-      future: _initialization,
-      builder: (context, snapshot) {
-        // Check for errors
-        if (snapshot.hasError) {
+      future: checkSeenAlready(),
+      builder: (context, seenSnapshot) {
+        _seen = (preferences?.getBool("seen") ?? false);
+        if (seenSnapshot.connectionState == ConnectionState.waiting) {
           return Center(
-            child: Text("ERROR: Someting went wrong."),
+            child: CircularProgressIndicator(),
           );
-        }
+        } else if (seenSnapshot.connectionState == ConnectionState.done) {
+          if (_seen) {
+            return FutureBuilder(
+              // Initialize FlutterFire:
+              future: _initialization,
+              builder: (context, snapshot) {
+                // Check for errors
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text("ERROR: Someting went wrong."),
+                  );
+                }
 
-        // Once complete, show your application
-        if (snapshot.connectionState == ConnectionState.done) {
-          return DataFormScreen();
-        }
+                // Once complete, show your application
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return LoginScreen();
+                }
 
-        return Center(
-          child: CircularProgressIndicator(),
-        );
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            );
+          } else {
+            preferences.setBool("seen", true);
+            return OnboardingScreen();
+          }
+        }
       },
     );
   }

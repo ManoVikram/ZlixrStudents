@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import './loginScreen.dart';
 import '../widgets/onboardContent.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -118,7 +119,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           if (_screenNumber != 2)
                             TextButton(
                               onPressed: () {
-                                // TODO: Create a Navigator to navigate to login/signup screen
+                                Navigator.of(context).pushReplacementNamed(
+                                    LoginScreen.routeName);
                               },
                               style: TextButton.styleFrom(
                                 minimumSize: Size(
@@ -160,7 +162,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           if (_screenNumber == 2)
                             TextButton(
                               onPressed: () {
-                                // TODO: Create a Navigator to navigate to login/signup screen
+                                Navigator.of(context).pushReplacementNamed(
+                                    LoginScreen.routeName);
                               },
                               style: TextButton.styleFrom(
                                 minimumSize: Size(
@@ -210,7 +213,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           if (_screenNumber != 2)
                             TextButton(
                               onPressed: () {
-                                // TODO: Create a Navigator to navigate to login/signup screen
+                                Navigator.of(context).pushReplacementNamed(
+                                    LoginScreen.routeName);
                               },
                               style: TextButton.styleFrom(
                                 minimumSize: Size(
@@ -252,7 +256,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           if (_screenNumber == 2)
                             TextButton(
                               onPressed: () {
-                                // TODO: Create a Navigator to navigate to login/signup screen
+                                Navigator.of(context).pushReplacementNamed(
+                                    LoginScreen.routeName);
                               },
                               style: TextButton.styleFrom(
                                 minimumSize: Size(

@@ -379,7 +379,7 @@ class _DataFormScreenState extends State<DataFormScreen>
                                     textStyle: NeumorphicTextStyle(
                                       fontFamily:
                                           GoogleFonts.oxygen().fontFamily,
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.w500,
                                     ),
                                     style: NeumorphicStyle(
@@ -394,10 +394,10 @@ class _DataFormScreenState extends State<DataFormScreen>
                                   onPressed: () async {
                                     await departmentBloc.add(
                                       FetchDepartmentData(
-                                        // firebaseUID:
-                                        //     state.studentData.firebaseUID,
                                         firebaseUID:
-                                            "Yw1et8lu8lXPrkTHxxTR2o6tB1p1",
+                                            state.studentData.firebaseUID,
+                                        /* firebaseUID:
+                                            "Yw1et8lu8lXPrkTHxxTR2o6tB1p1", */
                                       ),
                                     );
                                     /* await Future.delayed(
@@ -455,107 +455,117 @@ class _DataFormScreenState extends State<DataFormScreen>
                     );
                   },
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Neumorphic(
-                    style: NeumorphicStyle(
-                      shadowLightColorEmboss: Colors.white,
-                      shadowDarkColorEmboss: Colors.blueGrey[100],
-                      color: Colors.grey[100],
-                      depth: 10,
-                    ),
-                    child: Container(
-                      height: 65,
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              "Course",
-                              style: TextStyle(
-                                color: Colors.deepOrange,
-                                fontFamily: GoogleFonts.oxygen().fontFamily,
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Consumer<StudentInfo>(
-                            builder: (contxt, data, _) => Container(
-                              width: size.width * 0.4,
-                              child: NeumorphicText(
-                                studentInfoProvider
-                                        .studentInfo.course?.courseName ??
-                                    "",
-                                textAlign: TextAlign.center,
-                                textStyle: NeumorphicTextStyle(
-                                  fontFamily: GoogleFonts.oxygen().fontFamily,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                style: NeumorphicStyle(
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: NeumorphicButton(
-                              onPressed: () async {
-                                await courseBloc.add(
-                                  FetchCourseData(
-                                    firebaseUID: "Yw1et8lu8lXPrkTHxxTR2o6tB1p1",
-                                    departmentID: studentInfoProvider
-                                        .studentInfo.department?.departmentID,
+                BlocBuilder<RegisterStudentBloc, RegisterStudentState>(
+                  builder: (context, state) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Neumorphic(
+                        style: NeumorphicStyle(
+                          shadowLightColorEmboss: Colors.white,
+                          shadowDarkColorEmboss: Colors.blueGrey[100],
+                          color: Colors.grey[100],
+                          depth: 10,
+                        ),
+                        child: Container(
+                          height: 65,
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  "Course",
+                                  style: TextStyle(
+                                    color: Colors.deepOrange,
+                                    fontFamily: GoogleFonts.oxygen().fontFamily,
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                );
-                                /* await Future.delayed(
+                                ),
+                              ),
+                              Consumer<StudentInfo>(
+                                builder: (contxt, data, _) => Container(
+                                  width: size.width * 0.4,
+                                  child: NeumorphicText(
+                                    studentInfoProvider
+                                            .studentInfo.course?.courseName ??
+                                        "",
+                                    textAlign: TextAlign.center,
+                                    textStyle: NeumorphicTextStyle(
+                                      fontFamily:
+                                          GoogleFonts.oxygen().fontFamily,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    style: NeumorphicStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: NeumorphicButton(
+                                  onPressed: () async {
+                                    await courseBloc.add(
+                                      FetchCourseData(
+                                        /* firebaseUID:
+                                            "Yw1et8lu8lXPrkTHxxTR2o6tB1p1", */
+                                        firebaseUID:
+                                            state.studentData.firebaseUID,
+                                        departmentID: studentInfoProvider
+                                            .studentInfo
+                                            .department
+                                            ?.departmentID,
+                                      ),
+                                    );
+                                    /* await Future.delayed(
                                   Duration(seconds: 1),
                                 ); */
-                                setState(() {
-                                  _isMenuOpen2 = !_isMenuOpen2;
+                                    setState(() {
+                                      _isMenuOpen2 = !_isMenuOpen2;
 
-                                  if (_isMenuOpen1) {
-                                    _isMenuOpen1 = false;
-                                  }
-                                  if (_isMenuOpen3) {
-                                    _isMenuOpen3 = false;
-                                  }
-                                  if (_isMenuOpen4) {
-                                    _isMenuOpen4 = false;
-                                  }
-                                });
-                              },
-                              pressed: true,
-                              minDistance: -5,
-                              style: NeumorphicStyle(
-                                shadowLightColorEmboss: Colors.white,
-                                shadowDarkColorEmboss: Colors.blueGrey[100],
-                                color: Colors.grey[100],
-                                surfaceIntensity: 1.0,
-                                depth: 10,
+                                      if (_isMenuOpen1) {
+                                        _isMenuOpen1 = false;
+                                      }
+                                      if (_isMenuOpen3) {
+                                        _isMenuOpen3 = false;
+                                      }
+                                      if (_isMenuOpen4) {
+                                        _isMenuOpen4 = false;
+                                      }
+                                    });
+                                  },
+                                  pressed: true,
+                                  minDistance: -5,
+                                  style: NeumorphicStyle(
+                                    shadowLightColorEmboss: Colors.white,
+                                    shadowDarkColorEmboss: Colors.blueGrey[100],
+                                    color: Colors.grey[100],
+                                    surfaceIntensity: 1.0,
+                                    depth: 10,
+                                  ),
+                                  child: !_isMenuOpen2
+                                      ? Icon(
+                                          Icons.expand_more,
+                                          color: Colors.blueGrey,
+                                          key: UniqueKey(),
+                                        )
+                                      : Icon(
+                                          Icons.close,
+                                          color: Colors.blueGrey,
+                                          key: UniqueKey(),
+                                        ),
+                                ),
                               ),
-                              child: !_isMenuOpen2
-                                  ? Icon(
-                                      Icons.expand_more,
-                                      color: Colors.blueGrey,
-                                      key: UniqueKey(),
-                                    )
-                                  : Icon(
-                                      Icons.close,
-                                      color: Colors.blueGrey,
-                                      key: UniqueKey(),
-                                    ),
-                            ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
                 BlocBuilder<CourseDataBloc, CourseDataState>(
                   builder: (context, state) {
@@ -839,55 +849,61 @@ class _DataFormScreenState extends State<DataFormScreen>
                 SizedBox(
                   height: 25,
                 ),
-                Container(
-                  height: 65,
-                  width: size.width * 0.7,
-                  child: NeumorphicButton(
-                    onPressed: () {
-                      bool allCorrect = _verifyUpdates(context);
+                BlocBuilder<RegisterStudentBloc, RegisterStudentState>(
+                  builder: (context, state) {
+                    return Container(
+                      height: 65,
+                      width: size.width * 0.7,
+                      child: NeumorphicButton(
+                        onPressed: () {
+                          bool allCorrect = _verifyUpdates(context);
 
-                      if (allCorrect) {
-                        updateStudentBloc.add(
-                          UpdateStudentData(
-                            firebaseUID: "Yw1et8lu8lXPrkTHxxTR2o6tB1p1",
-                            name: _nameTextController.text,
-                            phone: _phoneTextController.text,
-                            studentRollNo: _rollNoTextController.text,
-                            degreeID: studentInfoProvider
-                                .studentInfo.department?.departmentID,
-                            courseID: studentInfoProvider
-                                .studentInfo.course?.courseID,
-                            /* dateOfBirth: DateTime.parse(
+                          if (allCorrect) {
+                            updateStudentBloc.add(
+                              UpdateStudentData(
+                                // firebaseUID: "Yw1et8lu8lXPrkTHxxTR2o6tB1p1",
+                                firebaseUID: state.studentData.firebaseUID,
+                                name: _nameTextController.text,
+                                phone: _phoneTextController.text,
+                                studentRollNo: _rollNoTextController.text,
+                                degreeID: studentInfoProvider
+                                    .studentInfo.department?.departmentID,
+                                courseID: studentInfoProvider
+                                    .studentInfo.course?.courseID,
+                                /* dateOfBirth: DateTime.parse(
                                 studentInfoProvider.studentInfo?.dob), */
-                            dateOfBirth: studentInfoProvider.studentInfo?.dob,
-                            batch: studentInfoProvider.studentInfo?.batch,
+                                dateOfBirth:
+                                    studentInfoProvider.studentInfo?.dob,
+                                batch: studentInfoProvider.studentInfo?.batch,
+                              ),
+                            );
+                          }
+                        },
+                        pressed: true,
+                        minDistance: -5,
+                        style: NeumorphicStyle(
+                          shadowLightColorEmboss: Colors.white,
+                          shadowDarkColorEmboss: Colors.blueGrey[100],
+                          color: Colors.deepPurpleAccent,
+                          surfaceIntensity: 1.0,
+                          depth: 20,
+                        ),
+                        child: Center(
+                          child: Text(
+                            "CONNECT",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: GoogleFonts.oxygen().fontFamily,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
+                            ),
                           ),
-                        );
-                      }
-                    },
-                    pressed: true,
-                    minDistance: -5,
-                    style: NeumorphicStyle(
-                      shadowLightColorEmboss: Colors.white,
-                      shadowDarkColorEmboss: Colors.blueGrey[100],
-                      color: Colors.deepPurpleAccent,
-                      surfaceIntensity: 1.0,
-                      depth: 20,
-                    ),
-                    child: Center(
-                      child: Text(
-                        "CONNECT",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: GoogleFonts.oxygen().fontFamily,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
                         ),
                       ),
-                    ),
-                  ),
-                ),
+                    );
+                  },
+                )
               ],
             ),
           ),

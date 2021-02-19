@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import './loginScreen.dart';
-
+import './dataFormScreen.dart';
 import '../models/bloc/registerStudentBloc/registerStudent_bloc.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -122,6 +122,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               firebaseUID: _userCredential.user.uid,
                               email: _userCredential.user.email,
                             ));
+
+                            if (_userCredential.user.uid != null) {
+                              Navigator.of(context).pushReplacementNamed(
+                                  DataFormScreen.routeName);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             elevation: 7,
