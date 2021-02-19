@@ -30,6 +30,9 @@ const StudentSchema = new Schema(
         degreeID: {
             type: Schema.Types.ObjectId,
         },
+        courseID: {
+            type: Schema.Types.ObjectId,
+        },
         batch: {
             type: Number,
         },

@@ -11,6 +11,7 @@ import '../widgets/animatedDropdown.dart';
 
 import '../models/bloc/registerStudentBloc/registerStudent_bloc.dart';
 import '../models/bloc/departmentDataBloc/departmentData_bloc.dart';
+import '../models/bloc/updateStudentBloc/updateStudentData_bloc.dart';
 
 import '../models/provider/studentInfo.dart';
 
@@ -80,10 +81,47 @@ class _DataFormScreenState extends State<DataFormScreen>
     );
   }
 
+  bool _verifyUpdates(BuildContext contxt) {
+    String message;
+
+    if (_phoneTextController.text.length != 10) {
+      message = "Enter the correct phone number";
+    } else if (_nameTextController.text.isEmpty) {
+      message = "Enter a valid name";
+    } else if (_rollNoTextController.text.isEmpty) {
+      message = "Enter a valid Roll No.";
+    }
+
+    if (message != null) {
+      print(message);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: Duration(
+            seconds: 2,
+          ),
+          elevation: 7,
+          backgroundColor: Theme.of(context).errorColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.0),
+              topRight: Radius.circular(20.0),
+            ),
+          ),
+        ),
+      );
+
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final departmentBloc = BlocProvider.of<DepartmentDataBloc>(context);
     final courseBloc = BlocProvider.of<CourseDataBloc>(context);
+    final updateStudentBloc = BlocProvider.of<UpdateStudentDataBloc>(context);
     final studentInfoProvider = context.watch<StudentInfo>();
 
     final Size size = MediaQuery.of(context).size;
@@ -805,13 +843,34 @@ class _DataFormScreenState extends State<DataFormScreen>
                   height: 65,
                   width: size.width * 0.7,
                   child: NeumorphicButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      bool allCorrect = _verifyUpdates(context);
+
+                      if (allCorrect) {
+                        updateStudentBloc.add(
+                          UpdateStudentData(
+                            firebaseUID: "Yw1et8lu8lXPrkTHxxTR2o6tB1p1",
+                            name: _nameTextController.text,
+                            phone: _phoneTextController.text,
+                            studentRollNo: _rollNoTextController.text,
+                            degreeID: studentInfoProvider
+                                .studentInfo.department?.departmentID,
+                            courseID: studentInfoProvider
+                                .studentInfo.course?.courseID,
+                            /* dateOfBirth: DateTime.parse(
+                                studentInfoProvider.studentInfo?.dob), */
+                            dateOfBirth: studentInfoProvider.studentInfo?.dob,
+                            batch: studentInfoProvider.studentInfo?.batch,
+                          ),
+                        );
+                      }
+                    },
                     pressed: true,
                     minDistance: -5,
                     style: NeumorphicStyle(
                       shadowLightColorEmboss: Colors.white,
                       shadowDarkColorEmboss: Colors.blueGrey[100],
-                      color: Colors.indigo,
+                      color: Colors.deepPurpleAccent,
                       surfaceIntensity: 1.0,
                       depth: 20,
                     ),

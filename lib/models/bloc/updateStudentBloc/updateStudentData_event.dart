@@ -12,7 +12,7 @@ class UpdateStudentData extends UpdateStudentDataEvent {
   final String name;
   final String phone;
   final String studentRollNo;
-  final DateTime dateOfBirth;
+  final String dateOfBirth;
   final dynamic degreeID;
   final dynamic courseID;
   final int batch;

@@ -17,7 +17,7 @@ class UpdateStudentDataBloc
   @override
   Stream<UpdateStudentDataState> mapEventToState(
       UpdateStudentDataEvent event) async* {
-    const url = "http://$API_HOST/api/update";
+    const url = "http://$API_HOST/api/student/update";
 
     if (event is UpdateStudentData) {
       final response = await http.post(
@@ -29,9 +29,10 @@ class UpdateStudentDataBloc
           "studentRollNo": event.studentRollNo,
           "dateOfBirth": event.dateOfBirth,
           "degreeID": event.degreeID,
-          "batch": event.batch,
-          "year": event.year ?? null,
-          "semester": event.semester ?? null,
+          "courseID": event.courseID,
+          "batch": event.batch.toString(),
+          /* "year": event.year ?? null,
+          "semester": event.semester ?? null, */
         },
       );
 
