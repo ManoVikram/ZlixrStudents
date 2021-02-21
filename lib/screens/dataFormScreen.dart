@@ -31,8 +31,6 @@ class _DataFormScreenState extends State<DataFormScreen>
 
   AnimationController _animationController;
 
-  String _dateOfBirth;
-  int _year, _semester;
   bool _isMenuOpen1 = false,
       _isMenuOpen2 = false,
       _isMenuOpen3 = false,
